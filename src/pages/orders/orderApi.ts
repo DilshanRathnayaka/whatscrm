@@ -202,7 +202,7 @@ const fetchJson = async <T>(url: string, init: OrderApiRequestOptions = {}): Pro
         headers: init.headers,
         body: init.body,
         signal: init.signal,
-        includeCompanyIdHeader: init.includeCompanyIdHeader ?? true,
+        includeCompanyIdHeader: init.includeCompanyIdHeader ?? false,
         includeCredentials: init.includeCredentials ?? true
     });
 
