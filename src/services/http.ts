@@ -11,6 +11,8 @@ const toHeaders = (headers?: HeadersInit) => {
     return new Headers(headers);
 };
 
+const NGROK_SKIP_WARNING_HEADER = 'ngrok-skip-browser-warning';
+
 let tokenExpiredHandled = false;
 const DEFAULT_COMPANY_ID = '1';
 const APP_BASE_PATH = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '') || '/';
@@ -52,7 +54,10 @@ const performServerLogout = async () => {
         // Use native fetch directly to avoid recursion through apiFetch interceptors.
         await fetch(AUTH_LOGOUT_URL, {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                [NGROK_SKIP_WARNING_HEADER]: 'true'
+            }
         });
     } catch {
         // Best effort only; continue local cleanup.
@@ -101,6 +106,10 @@ export const apiFetch = async (input: RequestInfo | URL, init: ApiFetchOptions =
 
     if (includeCompanyIdHeader && !headers.has('companyId')) {
         headers.set('companyId', getCompanyId());
+    }
+
+    if (!headers.has(NGROK_SKIP_WARNING_HEADER)) {
+        headers.set(NGROK_SKIP_WARNING_HEADER, 'true');
     }
 
     const response = await fetch(input, {
