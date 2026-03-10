@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosHeaders } from 'axios';
 import { useAppStore } from '../store/useAppStore';
 import { toast } from 'react-hot-toast';
 import { API_URL_CONFIG, buildAuthLogoutUrl } from '../config/api';
@@ -36,10 +36,10 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-    config.headers = config.headers ?? {};
-    if (!config.headers[NGROK_SKIP_WARNING_HEADER]) {
-        config.headers[NGROK_SKIP_WARNING_HEADER] = 'true';
-    }
+    const headers = AxiosHeaders.from(config.headers);
+    headers.set(NGROK_SKIP_WARNING_HEADER, 'true');
+    config.headers = headers;
+
     return config;
 });
 
@@ -144,12 +144,13 @@ export const apiFetch = async (input: RequestInfo | URL, init: ApiFetchOptions =
 
     const url = typeof input === 'string' || input instanceof URL ? input.toString() : input.url;
     const method = requestInit.method ?? (input instanceof Request ? input.method : 'GET');
+    const signal = requestInit.signal ?? undefined;
 
     const axiosResponse = await axiosClient.request({
         url,
         method,
         data: requestInit.body,
-        signal: requestInit.signal,
+        signal,
         withCredentials: requestInit.credentials ? requestInit.credentials === 'include' : includeCredentials,
         headers: Object.fromEntries(headers.entries()),
         responseType: 'text',
