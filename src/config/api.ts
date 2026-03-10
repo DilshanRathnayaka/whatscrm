@@ -1,6 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://172.104.46.12/whatsapp';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://chung-unoutspoken-unnicely.ngrok-free.dev/whatsapp';
 const AUTH_API_BASE_URL =
-  import.meta.env.VITE_AUTH_API_BASE_URL ?? 'https://172.104.46.12/auth';
+  import.meta.env.VITE_AUTH_API_BASE_URL ?? 'https://chung-unoutspoken-unnicely.ngrok-free.dev/auth';
 const WHATSAPP_API_BASE_PATH =
   import.meta.env.VITE_WHATSAPP_API_BASE_PATH ?? '/api/whatsapp';
 const INBOX_API_BASE_PATH =

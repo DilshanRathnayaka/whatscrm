@@ -13,6 +13,8 @@ const toHeaders = (headers?: HeadersInit) => {
 
 let tokenExpiredHandled = false;
 const DEFAULT_COMPANY_ID = '1';
+const APP_BASE_PATH = (import.meta.env.BASE_URL ?? '/').replace(/\/$/, '') || '/';
+const LOGIN_PATH = APP_BASE_PATH === '/' ? '/login' : `${APP_BASE_PATH}/login`;
 const AUTH_LOGOUT_URL =
     `${import.meta.env.VITE_AUTH_API_BASE_URL ?? 'http://localhost:9000'}`.replace(/\/$/, '') +
     `${import.meta.env.VITE_AUTH_API_BASE_PATH ?? '/auth/user'}/logout`;
@@ -69,9 +71,9 @@ const handleTokenExpired = async (message: string) => {
         id: 'token-expired',
         duration: 3000
     });
-    if (window.location.pathname !== '/login') {
+    if (window.location.pathname !== LOGIN_PATH) {
         clearBrowserAuthState();
-        window.location.replace('/login');
+        window.location.replace(LOGIN_PATH);
     }
 };
 
