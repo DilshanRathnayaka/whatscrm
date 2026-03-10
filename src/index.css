@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --sidebar-bg: #0f172a;
+  --sidebar-panel: #1e293b;
+  --sidebar-hover: #334155;
+  --sidebar-active: #25D366;
+  --sidebar-text: #94a3b8;
+  --sidebar-text-active: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --brand-green: #25D366;
+  --brand-green-dark: #1da851;
+  --brand-green-light: #dcfce7;
+  --brand-blue: #3b82f6;
+  --brand-blue-light: #eff6ff;
+  --status-online: #22c55e;
+  --status-away: #f59e0b;
+  --status-offline: #94a3b8;
+  --status-error: #ef4444;
+  --overlay: rgba(0, 0, 0, 0.5);
+}
+.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --sidebar-bg: #020617;
+  --sidebar-panel: #0f172a;
+  --sidebar-hover: #1e293b;
+  --sidebar-active: #25D366;
+  --sidebar-text: #64748b;
+  --sidebar-text-active: #ffffff;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #1e293b;
+  --border-hover: #334155;
+  --card-bg: #1e293b;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --input-bg: #1e293b;
+  --input-border: #334155;
+  --brand-green-light: #052e16;
+  --brand-blue-light: #1e3a5f;
+  --overlay: rgba(0, 0, 0, 0.7);
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+/* Smooth transitions */
+.theme-transition,
+.theme-transition * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+/* Chat bubble styles */
+.chat-bubble-sent {
+  background: var(--brand-green);
+  color: white;
+  border-radius: 18px 18px 4px 18px;
+}
+.chat-bubble-received {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border-radius: 18px 18px 18px 4px;
+  border: 1px solid var(--border-color);
+}
+/* Workflow canvas */
+.workflow-canvas {
+  background-image: radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease forwards;
+}
+.animate-slide-in-left {
+  animation: slideInLeft 0.2s ease forwards;
+}
+.typing-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+/* Sidebar transition */
+.sidebar-transition {
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Status indicator */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+/* Table hover */
+.table-row-hover:hover {
+  background-color: var(--bg-secondary);
+}
+/* Badge variants */
+.badge-green { background: var(--brand-green-light); color: #15803d; }
+.badge-blue { background: var(--brand-blue-light); color: #1d4ed8; }
+.badge-red { background: #fee2e2; color: #dc2626; }
+.badge-yellow { background: #fef9c3; color: #a16207; }
+.badge-gray { background: var(--bg-tertiary); color: var(--text-secondary); }
+.dark .badge-green { background: #052e16; color: #4ade80; }
+.dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+.dark .badge-red { background: #450a0a; color: #fca5a5; }
+.dark .badge-yellow { background: #422006; color: #fde047; }
+.dark .badge-gray { background: #334155; color: #94a3b8; }
