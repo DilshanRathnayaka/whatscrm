@@ -17,6 +17,11 @@ type OrdersApiTimelineDto = {
     note?: string;
 };
 
+type OrderApiRequestOptions = RequestInit & {
+    includeCompanyIdHeader?: boolean;
+    includeCredentials?: boolean;
+};
+
 export type OrdersApiOrderDto = {
     id?: string | number;
     orderId?: string | number;
@@ -191,8 +196,15 @@ export const mapOrderFromApi = (item: OrdersApiOrderDto): Order | null => {
     };
 };
 
-const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> => {
-    const response = await apiFetch(url, init);
+const fetchJson = async <T>(url: string, init: OrderApiRequestOptions = {}): Promise<T> => {
+    const response = await apiFetch(url, {
+        method: init.method ?? 'GET',
+        headers: init.headers,
+        body: init.body,
+        signal: init.signal,
+        includeCompanyIdHeader: init.includeCompanyIdHeader ?? true,
+        includeCredentials: init.includeCredentials ?? true
+    });
 
     if (!response.ok) {
         const errorText = await response.text();
@@ -233,7 +245,9 @@ export const updateOrderStatus = async (
         {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
+            body: JSON.stringify({ status }),
+            includeCompanyIdHeader: true,
+            includeCredentials: true
         }
     );
 
