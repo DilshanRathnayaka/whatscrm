@@ -246,7 +246,7 @@ export const updateOrderStatus = async (
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status }),
-            includeCompanyIdHeader: true,
+            includeCompanyIdHeader: false,
             includeCredentials: true
         }
     );
