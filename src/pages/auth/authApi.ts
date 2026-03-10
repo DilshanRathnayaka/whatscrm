@@ -61,7 +61,7 @@ export const loginUser = async (payload: LoginUserDto): Promise<string> => {
     const response = await apiFetch(buildAuthApiUrl('/login'), {
         method: 'POST',
         includeCompanyIdHeader: false,
-        includeCredentials: true,
+        includeCredentials: false,
         headers: {
             'Content-Type': 'application/json'
         },
