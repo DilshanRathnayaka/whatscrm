@@ -42,8 +42,11 @@ export function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
+
+  const routerBase = import.meta.env.BASE_URL;
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={routerBase}>
       <div className="theme-transition">
         <Toaster
           position="top-right"
