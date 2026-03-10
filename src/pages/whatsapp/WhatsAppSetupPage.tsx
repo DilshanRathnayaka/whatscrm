@@ -205,6 +205,7 @@ export function WhatsAppSetupPage() {
         throw new Error('App ID and App Secret are required');
       }
 
+      // Save app credentials first, then request OAuth redirect URL.
       await request<string>(
         `/save-secret-appid?appId=${encodeURIComponent(trimmedAppId)}&appSecret=${encodeURIComponent(trimmedAppSecret)}`,
         { method: 'POST' }
@@ -613,8 +614,8 @@ export function WhatsAppSetupPage() {
 
                 <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
                   <p className="text-sm text-blue-800 dark:text-blue-300">
-                    First we save your App ID and App Secret. Then you'll be
-                    redirected to Meta's authorization page.
+                    This action saves your App ID and App Secret, then calls
+                    connect and redirects you to Meta authorization.
                   </p>
                 </div>
                 <Button
@@ -623,7 +624,7 @@ export function WhatsAppSetupPage() {
                   onClick={handleConnect}
                   disabled={isConnecting}>
 
-                  {isConnecting ? 'Connecting...' : 'Connect with Meta'}
+                  {isConnecting ? 'Saving and connecting...' : 'Save and connect with Meta'}
                 </Button>
               </div>
             </Card>
