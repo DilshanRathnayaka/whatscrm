@@ -122,6 +122,16 @@ const isTokenExpiredPayload = (payload: unknown) => {
 };
 
 const getCompanyId = () => {
+    const companyIdFromStore = useAppStore.getState().company?.id;
+    if (companyIdFromStore && String(companyIdFromStore).trim() !== '') {
+        return String(companyIdFromStore);
+    }
+
+    const companyIdFromStorage = window.localStorage.getItem('companyId');
+    if (companyIdFromStorage && companyIdFromStorage.trim() !== '') {
+        return companyIdFromStorage;
+    }
+
     return DEFAULT_COMPANY_ID;
 };
 
