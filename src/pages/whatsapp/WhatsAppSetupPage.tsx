@@ -26,19 +26,19 @@ const steps: {
   desc: string;
 }[] = [
     {
-      id: 'meta',
-      label: 'Connect Meta Account',
-      desc: 'Authorize with Facebook/Meta'
+      id: 'phone',
+      label: 'Verify Token',
+      desc: 'Save webhook verify token'
     },
     {
       id: 'business',
-      label: 'Select Business Manager',
-      desc: 'Choose your Meta Business Manager'
+      label: 'Add WhatsApp Number',
+      desc: 'Save your Phone Number ID and phone number'
     },
     {
-      id: 'phone',
-      label: 'Add WhatsApp Number',
-      desc: 'Register your business phone number'
+      id: 'meta',
+      label: 'Connect Meta Account',
+      desc: 'Authorize with Facebook/Meta'
     }
   ];
 
@@ -143,7 +143,7 @@ export function WhatsAppSetupPage() {
   const company = useAppStore((state) => state.company);
   const tenantId = useMemo(() => parseTenantId(company?.id), [company?.id]);
 
-  const [currentStep, setCurrentStep] = useState<SetupStep>('meta');
+  const [currentStep, setCurrentStep] = useState<SetupStep>('phone');
   const [completedSteps, setCompletedSteps] = useState<SetupStep[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [account, setAccount] = useState<WhatsAppConnectionInfo | null>(null);
@@ -272,7 +272,7 @@ export function WhatsAppSetupPage() {
         { method: 'POST' }
       );
 
-      setCurrentStep('phone');
+      setCurrentStep('meta');
       setMessage({ type: 'success', text: 'Phone setup saved successfully' });
     } catch (error) {
       setMessage({
@@ -291,7 +291,7 @@ export function WhatsAppSetupPage() {
       await request<string>('/disconnect', { method: 'POST' });
       setIsConnected(false);
       setAccount(null);
-      setCurrentStep('meta');
+      setCurrentStep('phone');
       setMessage({ type: 'success', text: 'Disconnected successfully' });
     } catch (error) {
       setMessage({
@@ -318,7 +318,7 @@ export function WhatsAppSetupPage() {
         { method: 'POST' }
       );
 
-      setCurrentStep('phone');
+      setCurrentStep('business');
       setMessage({ type: 'success', text: 'Verify token saved successfully' });
     } catch (error) {
       setMessage({
@@ -363,7 +363,7 @@ export function WhatsAppSetupPage() {
         );
 
         setIsConnected(true);
-        setCurrentStep('business');
+        setCurrentStep('meta');
         setMessage({ type: 'success', text: 'Connected successfully' });
       } catch (error) {
         setMessage({
