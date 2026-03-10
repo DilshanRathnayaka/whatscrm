@@ -95,6 +95,16 @@ const mapContactFromApi = (item: ContactApiItem, index: number): Contact => {
   };
 };
 
+const getCompanyIdParam = () => {
+  const companyId = window.localStorage.getItem('companyId')?.trim();
+  return companyId && companyId.length > 0 ? companyId : '1';
+};
+
+const withCompanyIdQuery = (url: string) => {
+  const companyId = encodeURIComponent(getCompanyIdParam());
+  return url.includes('?') ? `${url}&companyId=${companyId}` : `${url}?companyId=${companyId}`;
+};
+
 export function ContactDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -109,7 +119,10 @@ export function ContactDetailPage() {
       setIsLoadingContact(true);
 
       try {
-        const response = await apiFetch(buildContactsApiUrl('/get-contacts'));
+        const response = await apiFetch(withCompanyIdQuery(buildContactsApiUrl('/get-contacts')), {
+          includeCompanyIdHeader: false,
+          includeCredentials: true
+        });
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(errorText || `Failed to load contact (${response.status})`);

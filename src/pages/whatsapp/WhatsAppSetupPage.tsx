@@ -164,14 +164,18 @@ export function WhatsAppSetupPage() {
     options?: RequestInit)
     : Promise<T> => {
     const resolvedCompanyId = String(tenantId || 1);
+    const endpointWithCompanyId = endpoint.includes('?') ?
+      `${endpoint}&companyId=${encodeURIComponent(resolvedCompanyId)}` :
+      `${endpoint}?companyId=${encodeURIComponent(resolvedCompanyId)}`;
 
-    const response = await apiFetch(buildWhatsAppApiUrl(endpoint), {
+    const response = await apiFetch(buildWhatsAppApiUrl(endpointWithCompanyId), {
       ...options,
       headers: {
         'Content-Type': 'application/json',
-        companyId: resolvedCompanyId,
         ...(options?.headers ?? {})
-      }
+      },
+      includeCompanyIdHeader: false,
+      includeCredentials: true
     });
 
     const contentType = response.headers.get('content-type') ?? '';

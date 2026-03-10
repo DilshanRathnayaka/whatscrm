@@ -435,6 +435,16 @@ export function InboxPage() {
     return matchesFilter && matchesSearch;
   });
 
+  const getCompanyIdParam = () => {
+    const companyId = window.localStorage.getItem('companyId')?.trim();
+    return companyId && companyId.length > 0 ? companyId : '1';
+  };
+
+  const withCompanyIdQuery = (url: string) => {
+    const companyId = encodeURIComponent(getCompanyIdParam());
+    return url.includes('?') ? `${url}&companyId=${companyId}` : `${url}?companyId=${companyId}`;
+  };
+
   const handleOpenContactDetail = (contact: Contact, fallbackId?: string) => {
     const targetId = contact.id || fallbackId || `phone-${normalizePhone(contact.phone)}`;
     navigate(`/contacts/${encodeURIComponent(targetId)}`, {
@@ -472,8 +482,10 @@ export function InboxPage() {
 
     try {
       const endpoint = `/save-contacts?id=${encodeURIComponent(activeConversationId)}&name=${encodeURIComponent(trimmedName)}`;
-      const response = await apiFetch(buildContactsApiUrl(endpoint), {
-        method: 'POST'
+      const response = await apiFetch(withCompanyIdQuery(buildContactsApiUrl(endpoint)), {
+        method: 'POST',
+        includeCompanyIdHeader: false,
+        includeCredentials: true
       });
 
       if (!response.ok) {
@@ -509,7 +521,10 @@ export function InboxPage() {
     setIsLoadingConversations(true);
 
     try {
-      const response = await apiFetch(buildInboxApiUrl('/conversations'));
+      const response = await apiFetch(withCompanyIdQuery(buildInboxApiUrl('/conversations')), {
+        includeCompanyIdHeader: false,
+        includeCredentials: true
+      });
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || `Failed to load conversations (${response.status})`);
@@ -536,7 +551,10 @@ export function InboxPage() {
 
     try {
       const encodedId = encodeURIComponent(conversationId);
-      const response = await apiFetch(buildInboxApiUrl(`/${encodedId}`));
+      const response = await apiFetch(withCompanyIdQuery(buildInboxApiUrl(`/${encodedId}`)), {
+        includeCompanyIdHeader: false,
+        includeCredentials: true
+      });
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText || `Failed to load messages (${response.status})`);
@@ -563,8 +581,10 @@ export function InboxPage() {
   const markConversationAsRead = async (conversationId: string) => {
     try {
       const encodedId = encodeURIComponent(conversationId);
-      const response = await apiFetch(buildInboxApiUrl(`/conversations/${encodedId}/read`), {
-        method: 'PUT'
+      const response = await apiFetch(withCompanyIdQuery(buildInboxApiUrl(`/conversations/${encodedId}/read`)), {
+        method: 'PUT',
+        includeCompanyIdHeader: false,
+        includeCredentials: true
       });
 
       if (!response.ok) {
@@ -592,11 +612,13 @@ export function InboxPage() {
     try {
       const encodedId = encodeURIComponent(conversationId);
       const response = await apiFetch(
-        buildInboxApiUrl(`/conversations/${encodedId}/status`),
+        withCompanyIdQuery(buildInboxApiUrl(`/conversations/${encodedId}/status`)),
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status })
+          body: JSON.stringify({ status }),
+          includeCompanyIdHeader: false,
+          includeCredentials: true
         }
       );
 
@@ -795,13 +817,15 @@ export function InboxPage() {
     setApiFeedback(null);
 
     try {
-      const response = await apiFetch(buildInboxApiUrl('/send'), {
+      const response = await apiFetch(withCompanyIdQuery(buildInboxApiUrl('/send')), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phone: activePhone,
           message: messageInput.trim()
-        })
+        }),
+        includeCompanyIdHeader: false,
+        includeCredentials: true
       });
 
       if (!response.ok) {
