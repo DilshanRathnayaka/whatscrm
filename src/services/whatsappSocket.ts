@@ -1,9 +1,13 @@
+import { API_URL_CONFIG } from '../config/api';
+
 type SocketClient = {
   connected: boolean;
   disconnect: (callback?: () => void) => void;
 };
 
-const wsUrl = import.meta.env.VITE_WHATSAPP_WS_URL ?? 'http://localhost:8080/ws/whatsapp';
+const wsUrl =
+  import.meta.env.VITE_WHATSAPP_WS_URL ??
+  `${API_URL_CONFIG.gatewayBaseUrl}/${API_URL_CONFIG.services.whatsapp}/ws/whatsapp`;
 
 export const connectWebSocket = <T = unknown>(
   onMessageReceived: (message: T) => void

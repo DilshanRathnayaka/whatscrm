@@ -139,7 +139,7 @@ export const apiFetch = async (input: RequestInfo | URL, init: ApiFetchOptions =
     const headers = toHeaders(init.headers);
 
     const {
-        includeCompanyIdHeader = true,
+        includeCompanyIdHeader = false,
         includeCredentials = true,
         ...requestInit
     } = init;
