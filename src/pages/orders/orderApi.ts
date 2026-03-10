@@ -17,10 +17,7 @@ type OrdersApiTimelineDto = {
     note?: string;
 };
 
-type OrderApiRequestOptions = RequestInit & {
-    includeCompanyIdHeader?: boolean;
-    includeCredentials?: boolean;
-};
+type OrderApiRequestOptions = Omit<RequestInit, 'headers' | 'credentials'>;
 
 export type OrdersApiOrderDto = {
     id?: string | number;
@@ -209,11 +206,10 @@ export const mapOrderFromApi = (item: OrdersApiOrderDto): Order | null => {
 const fetchJson = async <T>(url: string, init: OrderApiRequestOptions = {}): Promise<T> => {
     const response = await apiFetch(url, {
         method: init.method ?? 'GET',
-        headers: init.headers,
         body: init.body,
         signal: init.signal,
-        includeCompanyIdHeader: init.includeCompanyIdHeader ?? false,
-        includeCredentials: init.includeCredentials ?? true
+        includeCompanyIdHeader: false,
+        includeCredentials: true
     });
 
     if (!response.ok) {
@@ -256,10 +252,7 @@ export const updateOrderStatus = async (
         withCompanyIdQuery(buildOrdersApiUrl(`/${encodeURIComponent(orderId)}/status`)),
         {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status }),
-            includeCompanyIdHeader: false,
-            includeCredentials: true
+            body: JSON.stringify({ status })
         }
     );
 
