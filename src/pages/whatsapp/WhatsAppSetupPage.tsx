@@ -179,15 +179,25 @@ export function WhatsAppSetupPage() {
     });
 
     const contentType = response.headers.get('content-type') ?? '';
-    const raw = contentType.includes('application/json') ?
-      await response.json() :
-      await response.text();
+    const rawText = await response.text();
+    let raw: unknown = rawText;
+
+    if (contentType.includes('application/json') && rawText.trim().length > 0) {
+      try {
+        raw = JSON.parse(rawText);
+      } catch {
+        // Some backend endpoints return plain text with JSON content-type.
+        raw = rawText;
+      }
+    }
 
     if (!response.ok) {
       const errorMessage =
         typeof raw === 'string' && raw.trim().length > 0 ?
           raw :
-          `Request failed with status ${response.status}`;
+          typeof raw === 'object' && raw !== null && 'message' in raw && typeof (raw as { message?: unknown }).message === 'string' ?
+            (raw as { message: string }).message :
+            `Request failed with status ${response.status}`;
       throw new Error(errorMessage);
     }
 
