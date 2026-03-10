@@ -1,63 +1,54 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://chung-unoutspoken-unnicely.ngrok-free.dev/whatsapp';
-const AUTH_API_BASE_URL =
-  import.meta.env.VITE_AUTH_API_BASE_URL ?? 'https://chung-unoutspoken-unnicely.ngrok-free.dev/auth';
-const WHATSAPP_API_BASE_PATH =
-  import.meta.env.VITE_WHATSAPP_API_BASE_PATH ?? '/api/whatsapp';
-const INBOX_API_BASE_PATH =
-  import.meta.env.VITE_INBOX_API_BASE_PATH ?? '/webhook/whatsapp';
-const CONTACTS_API_BASE_PATH =
-  import.meta.env.VITE_CONTACTS_API_BASE_PATH ?? '/api/contacts';
-const ORDERS_API_BASE_PATH =
-  import.meta.env.VITE_ORDERS_API_BASE_PATH ?? '/api/orders';
-const COMPANY_API_BASE_PATH =
-  import.meta.env.VITE_COMPANY_API_BASE_PATH ?? '/api/company';
-const AUTH_API_BASE_PATH =
-  import.meta.env.VITE_AUTH_API_BASE_PATH ?? '/auth/user';
+export const API_URL_CONFIG = {
+  gatewayBaseUrl: 'https://chung-unoutspoken-unnicely.ngrok-free.dev',
+  services: {
+    api: 'api',
+    auth: 'auth',
+    whatsapp: 'whatsapp',
+  },
+  paths: {
+    auth: '/user',
+    whatsapp: '/api/whatsapp',
+    inbox: '/webhook/whatsapp',
+    contacts: '/api/contacts',
+    orders: '/api/orders',
+    company: '/api/company',
+  },
+} as const;
 
-const buildApiUrl = (basePath: string, endpoint: string) => {
-  const base = API_BASE_URL.replace(/\/$/, '');
+const buildApiUrl = (serviceName: string, basePath: string, endpoint: string) => {
+  const base = API_URL_CONFIG.gatewayBaseUrl.replace(/\/$/, '');
+  const service = serviceName.replace(/^\//, '').replace(/\/$/, '');
   const root = basePath.replace(/^\//, '').replace(/\/$/, '');
   const path = endpoint.replace(/^\//, '');
 
-  return path ? `${base}/${root}/${path}` : `${base}/${root}`;
-};
-
-const buildApiUrlWithCustomBase = (
-  apiBaseUrl: string,
-  basePath: string,
-  endpoint: string
-) => {
-  const base = apiBaseUrl.replace(/\/$/, '');
-  const root = basePath.replace(/^\//, '').replace(/\/$/, '');
-  const path = endpoint.replace(/^\//, '');
-
-  return path ? `${base}/${root}/${path}` : `${base}/${root}`;
+  const serviceRoot = `${base}/${service}`;
+  return path ? `${serviceRoot}/${root}/${path}` : `${serviceRoot}/${root}`;
 };
 
 export const buildWhatsAppApiUrl = (endpoint: string) => {
-  return buildApiUrl(WHATSAPP_API_BASE_PATH, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.whatsapp, API_URL_CONFIG.paths.whatsapp, endpoint);
 };
 
 export const buildInboxApiUrl = (endpoint = '') => {
-  return buildApiUrl(INBOX_API_BASE_PATH, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.whatsapp, API_URL_CONFIG.paths.inbox, endpoint);
 };
 
 export const buildContactsApiUrl = (endpoint = '') => {
-  return buildApiUrl(CONTACTS_API_BASE_PATH, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.contacts, endpoint);
 };
 
 export const buildOrdersApiUrl = (endpoint = '') => {
-  return buildApiUrl(ORDERS_API_BASE_PATH, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.orders, endpoint);
 };
 
 export const buildCompanyApiUrl = (endpoint = '') => {
-  return buildApiUrl(COMPANY_API_BASE_PATH, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.company, endpoint);
 };
 
 export const buildAuthApiUrl = (endpoint = '') => {
-  return buildApiUrlWithCustomBase(
-    AUTH_API_BASE_URL,
-    AUTH_API_BASE_PATH,
-    endpoint
-  );
+  return buildApiUrl(API_URL_CONFIG.services.auth, API_URL_CONFIG.paths.auth, endpoint);
+};
+
+export const buildAuthLogoutUrl = () => {
+  return buildApiUrl(API_URL_CONFIG.services.auth, API_URL_CONFIG.paths.auth, 'logout');
 };
