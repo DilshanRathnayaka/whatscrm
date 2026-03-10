@@ -88,6 +88,16 @@ export function DashboardPage() {
     hasSyncedCompanyRef.current = true;
 
     const loadCompany = async () => {
+      const shouldSkipCompanySync =
+        typeof location.state === 'object' &&
+        location.state !== null &&
+        'skipCompanySync' in location.state &&
+        Boolean((location.state as { skipCompanySync?: boolean }).skipCompanySync);
+
+      if (shouldSkipCompanySync) {
+        return;
+      }
+
       const usernameFromRoute =
         typeof location.state === 'object' &&
           location.state !== null &&

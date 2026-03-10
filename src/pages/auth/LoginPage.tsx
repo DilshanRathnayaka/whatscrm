@@ -80,7 +80,8 @@ export function LoginPage() {
       login(resolvedUser, resolvedCompany);
       navigate('/dashboard', {
         state: {
-          username: trimmedUsername
+          username: trimmedUsername,
+          skipCompanySync: true
         }
       });
     } catch (loginError) {

@@ -42,7 +42,7 @@ export const buildOrdersApiUrl = (endpoint = '') => {
 };
 
 export const buildCompanyApiUrl = (endpoint = '') => {
-  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.company, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.whatsapp, API_URL_CONFIG.paths.company, endpoint);
 };
 
 export const buildAuthApiUrl = (endpoint = '') => {
