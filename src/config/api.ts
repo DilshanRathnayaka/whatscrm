@@ -1,7 +1,6 @@
 export const API_URL_CONFIG = {
   gatewayBaseUrl: 'https://chung-unoutspoken-unnicely.ngrok-free.dev',
   services: {
-    api: 'api',
     auth: 'auth',
     whatsapp: 'whatsapp',
   },
@@ -34,11 +33,11 @@ export const buildInboxApiUrl = (endpoint = '') => {
 };
 
 export const buildContactsApiUrl = (endpoint = '') => {
-  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.contacts, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.whatsapp, API_URL_CONFIG.paths.contacts, endpoint);
 };
 
 export const buildOrdersApiUrl = (endpoint = '') => {
-  return buildApiUrl(API_URL_CONFIG.services.api, API_URL_CONFIG.paths.orders, endpoint);
+  return buildApiUrl(API_URL_CONFIG.services.whatsapp, API_URL_CONFIG.paths.orders, endpoint);
 };
 
 export const buildCompanyApiUrl = (endpoint = '') => {
