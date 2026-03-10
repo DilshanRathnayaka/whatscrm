@@ -6,7 +6,7 @@ export const API_URL_CONFIG = {
     whatsapp: 'whatsapp',
   },
   paths: {
-    auth: '/user',
+    auth: '/auth/user',
     whatsapp: '/api/whatsapp',
     inbox: '/webhook/whatsapp',
     contacts: '/api/contacts',
