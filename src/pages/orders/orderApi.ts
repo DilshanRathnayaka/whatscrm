@@ -126,6 +126,16 @@ const buildFallbackContact = (
     };
 };
 
+const getCompanyIdParam = () => {
+    const companyId = window.localStorage.getItem('companyId')?.trim();
+    return companyId && companyId.length > 0 ? companyId : '1';
+};
+
+const withCompanyIdQuery = (url: string) => {
+    const companyId = encodeURIComponent(getCompanyIdParam());
+    return url.includes('?') ? `${url}&companyId=${companyId}` : `${url}?companyId=${companyId}`;
+};
+
 export const mapOrderFromApi = (item: OrdersApiOrderDto): Order | null => {
     const rawId = item.id ?? item.orderId;
     if (rawId === undefined || rawId === null || String(rawId).trim() === '') {
@@ -216,7 +226,9 @@ const fetchJson = async <T>(url: string, init: OrderApiRequestOptions = {}): Pro
 
 export const fetchOrders = async (phone?: string): Promise<Order[]> => {
     const endpoint = phone ? `/customer/${encodeURIComponent(phone)}` : '';
-    const payload = await fetchJson<OrdersApiOrderDto[]>(buildOrdersApiUrl(endpoint));
+    const payload = await fetchJson<OrdersApiOrderDto[]>(
+        withCompanyIdQuery(buildOrdersApiUrl(endpoint))
+    );
 
     return (payload ?? [])
         .map(mapOrderFromApi)
@@ -225,7 +237,7 @@ export const fetchOrders = async (phone?: string): Promise<Order[]> => {
 
 export const fetchOrderById = async (orderId: string): Promise<Order> => {
     const payload = await fetchJson<OrdersApiOrderDto>(
-        buildOrdersApiUrl(`/${encodeURIComponent(orderId)}`)
+        withCompanyIdQuery(buildOrdersApiUrl(`/${encodeURIComponent(orderId)}`))
     );
     const mapped = mapOrderFromApi(payload);
 
@@ -241,7 +253,7 @@ export const updateOrderStatus = async (
     status: OrderStatus
 ): Promise<Order> => {
     const payload = await fetchJson<OrdersApiOrderDto>(
-        buildOrdersApiUrl(`/${encodeURIComponent(orderId)}/status`),
+        withCompanyIdQuery(buildOrdersApiUrl(`/${encodeURIComponent(orderId)}/status`)),
         {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
